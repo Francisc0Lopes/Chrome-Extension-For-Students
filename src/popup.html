@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Buddy</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      width: 270px;
+    }
+    ul { list-style: none; padding: 0; }
+    li { display: flex; justify-content: space-between; margin: 5px 0; }
+    button { cursor: pointer; margin: 2px 0; }
+    #timer { font-size: 24px; text-align: center; margin: 10px 0; }
+    canvas { margin-top: 15px; }
+  </style>
+</head>
+<body>
+  <h2>📚 Student Buddy</h2>
+
+  <!-- Tarefas -->
+  <input type="text" id="taskInput" placeholder="Nova tarefa...">
+  <button id="addTaskBtn">Adicionar</button>
+  <ul id="taskList"></ul>
+  <button id="notifyBtn">Enviar lembrete agora 📣</button>
+
+  <!-- Pomodoro Timer -->
+  <h3>⏱ Pomodoro Timer</h3>
+  <div>
+    <label for="taskSelect">Tarefa:</label>
+    <select id="taskSelect">
+      <option value="">--Seleciona tarefa--</option>
+    </select>
+  </div>
+  <div id="timer">25:00</div>
+  <button id="startBtn">Iniciar</button>
+  <button id="resetBtn">Reset</button>
+
+  <!-- Dashboard -->
+  <h3>📊 Produtividade</h3>
+  <canvas id="pomodoroChartDaily" width="250" height="150"></canvas>
+  <canvas id="pomodoroChartTask" width="250" height="150"></canvas>
+
+  <script src="popup.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,49 +1,236 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
   <meta charset="UTF-8">
   <title>Student Buddy</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      padding: 10px;
-      width: 270px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 15px;
+      width: 450px;
+      max-height: 700px;
+      overflow-y: auto;
+      background-color: #f8f9fa;
+      color: #333;
     }
-    ul { list-style: none; padding: 0; }
-    li { display: flex; justify-content: space-between; margin: 5px 0; }
-    button { cursor: pointer; margin: 2px 0; }
-    #timer { font-size: 24px; text-align: center; margin: 10px 0; }
-    canvas { margin-top: 15px; }
+
+    h2 {
+      color: #4a6baf;
+      border-bottom: 2px solid #eaeaea;
+      padding-bottom: 10px;
+      margin-top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h3 {
+      color: #4a6baf;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4a6baf;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 5px 0;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #3a559c;
+    }
+
+    #notifyBtn {
+      background-color: #28a745;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    #notifyBtn:hover {
+      background-color: #218838;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      margin: 5px 0;
+      background-color: #f1f1f1;
+      border-radius: 4px;
+    }
+
+    #timer {
+      font-size: 32px;
+      text-align: center;
+      margin: 15px 0;
+      font-weight: bold;
+      color: #4a6baf;
+    }
+
+    .timer-controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    /* Removido estilos de gráficos */
+    select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 10px;
+    }
+
+    .section {
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .no-data {
+      text-align: center;
+      color: #6c757d;
+      font-style: italic;
+      padding: 20px 0;
+    }
+
+    .refresh-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      color: #4a6baf;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 4px 8px;
+      z-index: 10;
+    }
+
+    /* Removido estilos de tabs */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #4a6baf;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #6c757d;
+    }
   </style>
 </head>
+
 <body>
-  <h2>📚 Student Buddy</h2>
+  <h2>
+    <span>📚 Student Buddy</span>
+    <button class="refresh-btn" id="refreshAll" title="Atualizar dados">🔄</button>
+  </h2>
 
-  <!-- Tarefas -->
-  <input type="text" id="taskInput" placeholder="Nova tarefa...">
-  <button id="addTaskBtn">Adicionar</button>
-  <ul id="taskList"></ul>
-  <button id="notifyBtn">Enviar lembrete agora 📣</button>
-
-  <!-- Pomodoro Timer -->
-  <h3>⏱ Pomodoro Timer</h3>
-  <div>
-    <label for="taskSelect">Tarefa:</label>
-    <select id="taskSelect">
-      <option value="">--Seleciona tarefa--</option>
-    </select>
+  <div class="section">
+    <h3>📝 Tarefas</h3>
+    <input type="text" id="taskInput" placeholder="Nova tarefa...">
+    <button id="addTaskBtn">Adicionar Tarefa</button>
+    <ul id="taskList"></ul>
+    <button id="notifyBtn">Enviar lembrete agora 📣</button>
   </div>
-  <div id="timer">25:00</div>
-  <button id="startBtn">Iniciar</button>
-  <button id="resetBtn">Reset</button>
 
-  <!-- Dashboard -->
-  <h3>📊 Produtividade</h3>
-  <canvas id="pomodoroChartDaily" width="250" height="150"></canvas>
-  <canvas id="pomodoroChartTask" width="250" height="150"></canvas>
+  <div class="section">
+    <h3>⏱ Pomodoro Timer</h3>
+    <div>
+      <label for="taskSelect">Tarefa:</label>
+      <select id="taskSelect">
+        <option value="">--Seleciona tarefa--</option>
+      </select>
+    </div>
+    <div id="timer">25:00</div>
+    <div class="timer-controls">
+      <button id="startBtn">Iniciar</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+  </div>
 
-  <script src="popup.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <div class="section">
+    <h3>📊 Estatísticas de Produtividade</h3>
+    <button id="btnTestData" style="margin-bottom:10px;background:#888;">Adicionar Dados de Teste</button>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="todayCount">0</div>
+        <div class="stat-label">Hoje</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="weekCount">0</div>
+        <div class="stat-label">Esta semana</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="monthCount">0</div>
+        <div class="stat-label">Este mês</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="totalCount">0</div>
+        <div class="stat-label">Total</div>
+      </div>
+    </div>
+    <div style="margin-top:20px;">
+      <div style="margin-bottom:10px;font-weight:bold;">Gráficos de Pomodoros</div>
+      <div style="display:flex;gap:10px;margin-bottom:10px;">
+        <button id="btnGraficoDiario">Diário</button>
+        <button id="btnGraficoSemanal">Semanal</button>
+        <button id="btnGraficoMensal">Mensal</button>
+      </div>
+      <canvas id="pomodoroChart" width="400" height="200" style="background:#fff;border-radius:8px;"></canvas>
+    </div>
+    <div style="margin-top:20px;">
+      <div style="margin-bottom:10px;font-weight:bold;">Pomodoros por Tarefa</div>
+      <canvas id="pomodoroChartTask" width="400" height="200" style="background:#fff;border-radius:8px;"></canvas>
+    </div>
+  </div>
+
+  <script src="graficos.js"></script>
   <script src="dashboard.js"></script>
+  <script src="popup.js"></script>
 </body>
+
 </html>
